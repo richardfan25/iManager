@@ -235,6 +235,7 @@ static void imanager_add_attribute(struct imanager_ec_data *ec,
 			wdt->num++;
 			break;
 		}
+		break;
 	case ADC:
 		switch (attr->did) {
 		case ADC12VS0:
@@ -278,6 +279,7 @@ static void imanager_add_attribute(struct imanager_ec_data *ec,
 			adc->num++;
 			break;
 		}
+		break;
 	case PWM:
 		switch (attr->did) {
 		case CPUFAN_2P:
@@ -312,6 +314,7 @@ static void imanager_add_attribute(struct imanager_ec_data *ec,
 			bl->num++;
 			break;
 		}
+		break;
 	case SMB:
 		switch (attr->did) {
 		case SMBEEPROM:
@@ -331,6 +334,7 @@ static void imanager_add_attribute(struct imanager_ec_data *ec,
 			i2c->num++;
 			break;
 		}
+		break;
 	case IRQ:
 		if (attr->did == WDIRQ) {
 			wdt->attr[0] = attr;
@@ -803,19 +807,24 @@ static int imanager_register_cells(struct imanager_device_data *imgr)
 	int i = 0;
 
 	if (ec->features & IMANAGER_FEATURE_BACKLIGHT)
-		devs[i++] = imanager_devs[IMANAGER_BACKLIGHT];
+		//devs[i++] = imanager_devs[IMANAGER_BACKLIGHT];
+		memcpy(&devs[i++], &imanager_devs[IMANAGER_BACKLIGHT], sizeof(struct mfd_cell));
 
 	if (ec->features & IMANAGER_FEATURE_GPIO)
-		devs[i++] = imanager_devs[IMANAGER_GPIO];
+		//devs[i++] = imanager_devs[IMANAGER_GPIO];
+		memcpy(&devs[i++], &imanager_devs[IMANAGER_GPIO], sizeof(struct mfd_cell));
 
 	if (ec->features & IMANAGER_FEATURE_HWMON_ADC)
-		devs[i++] = imanager_devs[IMANAGER_HWMON];
+		//devs[i++] = imanager_devs[IMANAGER_HWMON];
+		memcpy(&devs[i++], &imanager_devs[IMANAGER_HWMON], sizeof(struct mfd_cell));
 
 	if (ec->features & IMANAGER_FEATURE_SMBUS)
-		devs[i++] = imanager_devs[IMANAGER_SMB];
+		//devs[i++] = imanager_devs[IMANAGER_SMB];
+		memcpy(&devs[i++], &imanager_devs[IMANAGER_SMB], sizeof(struct mfd_cell));
 
 	if (ec->features & IMANAGER_FEATURE_WDT)
-		devs[i++] = imanager_devs[IMANAGER_WDT];
+		//devs[i++] = imanager_devs[IMANAGER_WDT];
+		memcpy(&devs[i++], &imanager_devs[IMANAGER_WDT], sizeof(struct mfd_cell));
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3, 6, 0)
 	return mfd_add_devices(imgr->dev, -1, devs, i, NULL, 0);
